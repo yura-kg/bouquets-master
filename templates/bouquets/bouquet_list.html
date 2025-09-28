@@ -1,0 +1,66 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Управление букетами</h2>
+    <div>
+        <a href="{% url 'create_bouquet' %}" class="btn btn-primary me-2">
+            💐 Добавить букет
+        </a>
+        <button class="btn btn-outline-secondary"
+                hx-get="{% url 'import_tilda_csv' %}"
+                hx-target="#modalDialog"
+                hx-trigger="click"
+                data-bs-toggle="modal" 
+                data-bs-target="#modal">
+            📁 Импорт из Tilda
+        </button>
+    </div>
+</div>
+
+{% if bouquets %}
+<div class="row">
+    {% for bouquet in bouquets %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ bouquet.title }}</h5>
+                <p class="card-text text-muted small">{{ bouquet.category }}</p>
+                <p class="card-text">{{ bouquet.description|truncatewords:20 }}</p>
+                
+                <div class="mb-2">
+                    <strong>Состав:</strong>
+                    <ul class="small mb-1">
+                        {% for comp in bouquet.composition.all %}
+                        <li>{{ comp.flower_item.name }} × {{ comp.quantity }}</li>
+                        {% empty %}
+                        <li class="text-muted">Состав не указан</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    <strong class="text-primary">{{ bouquet.calculated_price }} руб.</strong>
+                    <div class="btn-group">
+                        <a href="{% url 'edit_bouquet' bouquet.pk %}" 
+                           class="btn btn-sm btn-outline-primary">✏️</a>
+                        <button class="btn btn-sm btn-outline-danger"
+                                hx-get="{% url 'delete_bouquet' bouquet.pk %}"
+                                hx-target="#modalDialog"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#modal">
+                            🗑️
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-5">
+    <div class="text-muted mb-3">
+        <i class="fas fa-flower" style="font-size: 3rem;"></i>
+    </div>
+    <h4>Букеты не найдены</h4>
+    <p class="text-muted">Создайте первый букет или импортируйте данные из Tilda.</p>
+</div>
+{% endif %}

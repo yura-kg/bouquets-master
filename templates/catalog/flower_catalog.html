@@ -1,0 +1,71 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Каталог цветов и расходников</h2>
+    <div>
+        <button class="btn btn-primary me-2" 
+                hx-get="{% url 'add_flower_item' %}"
+                hx-target="#modalDialog"
+                hx-trigger="click"
+                data-bs-toggle="modal" 
+                data-bs-target="#modal">
+            ➕ Добавить элемент
+        </button>
+        <button class="btn btn-outline-secondary"
+                hx-get="{% url 'import_csv' %}"
+                hx-target="#modalDialog"
+                hx-trigger="click"
+                data-bs-toggle="modal" 
+                data-bs-target="#modal">
+            📁 Импорт CSV
+        </button>
+    </div>
+</div>
+
+<!-- Search Box -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <form method="get" action="{% url 'flower_catalog' %}">
+            <div class="input-group">
+                <input type="text" class="form-control" name="search" 
+                       placeholder="Поиск по названию..." value="{{ search_query }}">
+                <button class="btn btn-outline-primary" type="submit">🔍 Найти</button>
+                {% if search_query %}
+                <a href="{% url 'flower_catalog' %}" class="btn btn-outline-secondary">Очистить</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Flowers Table -->
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Название</th>
+                <th>Тип</th>
+                <th>Цена (руб)</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody id="flowerItemsTable">
+            {% for item in flower_items %}
+            {% include 'catalog/partials/flower_item_row.html' %}
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center text-muted py-4">
+                    📝 Каталог пуст. Добавьте первый элемент или импортируйте данные из CSV.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal for forms -->
+<div class="modal fade" id="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" id="modalDialog">
+            <!-- Content will be loaded via HTMX -->
+        </div>
+    </div>
+</div>

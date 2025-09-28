@@ -1,0 +1,19 @@
+<div class="modal-header">
+    <h5 class="modal-title">Подтверждение удаления</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+    <p>Вы уверены, что хотите удалить элемент <strong>"{{ item.name }}"</strong>?</p>
+    <p class="text-muted">Это действие нельзя отменить.</p>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+    <form hx-post="{% url 'delete_flower_item' item.pk %}" 
+          hx-target="#flowerItemRow-{{ item.pk }}" 
+          class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Удалить</button>
+    </form>
+</div>

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Редактировать {{ bouquet.title }} - БукетМастер{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Редактирование букета: {{ bouquet.title }}</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{% url 'bouquet_list' %}" class="btn btn-secondary">Назад к списку</a>
+                        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Composition Management -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Состав букета</h5>
+            </div>
+            <div class="card-body">
+                <div id="compositionSection">
+                    {% include 'bouquets/partials/composition_list.html' %}
+                </div>
+                
+                <hr>
+                
+                <h6>Добавить элемент:</h6>
+                <form hx-post="{% url 'add_composition_item' bouquet.pk %}"
+                      hx-target="#compositionSection"
+                      hx-swap="innerHTML">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Цветок/Расходник</label>
+                        <select name="flower_item" class="form-select" required>
+                            <option value="">Выберите элемент...</option>
+                            {% for flower in user.floweritem_set.all %}
+                            <option value="{{ flower.pk }}">{{ flower.name }} ({{ flower.price }} руб.)</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Количество</label>
+                        <input type="number" name="quantity" class="form-control" value="1" min="1" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success w-100">➕ Добавить в состав</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Price Summary -->
+        <div class="card mt-3">
+            <div class="card-body text-center">
+                <h5>Итоговая цена</h5>
+                <div class="display-6 text-primary">{{ bouquet.calculated_price }} руб.</div>
+                <small class="text-muted">Рассчитано автоматически</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

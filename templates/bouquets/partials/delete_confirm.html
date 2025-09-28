@@ -1,0 +1,17 @@
+<div class="modal-header">
+    <h5 class="modal-title">Подтверждение удаления</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+    <p>Вы уверены, что хотите удалить букет <strong>"{{ bouquet.title }}"</strong>?</p>
+    <p class="text-muted">Это действие нельзя отменить.</p>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+    <form method="post" action="{% url 'delete_bouquet' bouquet.pk %}" class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Удалить</button>
+    </form>
+</div>

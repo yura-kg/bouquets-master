@@ -1,0 +1,29 @@
+<tr id="flowerItemRow-{{ item.pk }}">
+    <td>{{ item.name }}</td>
+    <td>
+        <span class="badge {% if item.type == 'flower' %}bg-success{% else %}bg-info{% endif %}">
+            {{ item.get_type_display }}
+        </span>
+    </td>
+    <td>{{ item.price }}</td>
+    <td>
+        <div class="btn-group btn-group-sm">
+            <button class="btn btn-outline-primary"
+                    hx-get="{% url 'edit_flower_item' item.pk %}"
+                    hx-target="#modalDialog"
+                    hx-trigger="click"
+                    data-bs-toggle="modal" 
+                    data-bs-target="#modal">
+                ✏️
+            </button>
+            <button class="btn btn-outline-danger"
+                    hx-get="{% url 'delete_flower_item' item.pk %}"
+                    hx-target="#modalDialog"
+                    hx-trigger="click"
+                    data-bs-toggle="modal" 
+                    data-bs-target="#modal">
+                🗑️
+            </button>
+        </div>
+    </td>
+</tr>

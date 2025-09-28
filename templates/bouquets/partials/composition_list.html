@@ -1,0 +1,33 @@
+{% if composition_items %}
+<div class="mb-3">
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>Элемент</th>
+                <th>Кол-во</th>
+                <th>Цена</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in composition_items %}
+            <tr>
+                <td>{{ item.flower_item.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.flower_item.price }} руб.</td>
+                <td class="text-end">
+                    <button class="btn btn-sm btn-outline-danger"
+                            hx-post="{% url 'remove_composition_item' bouquet.pk item.pk %}"
+                            hx-target="#compositionSection"
+                            hx-confirm="Удалить этот элемент из состава?">
+                        🗑️
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="text-muted text-center">Состав букета пуст</p>
+{% endif %}
