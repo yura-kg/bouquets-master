@@ -1,12 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils import timezone
 
 class CustomUser(AbstractUser):
     email = models.EmailField('email address', unique=True)
-    is_confirmed = models.BooleanField('email confirmed', default=False)
-    confirmation_token = models.CharField(max_length=100, blank=True, null=True)
-    confirmation_sent_at = models.DateTimeField(null=True, blank=True)
     
     # For future subscription functionality
     subscription_tier = models.CharField(

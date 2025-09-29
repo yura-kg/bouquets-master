@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 
 {% block title %}Вход - БукетМастер{% endblock %}
 
@@ -10,9 +9,24 @@
             <div class="card-body">
                 <h3 class="card-title text-center mb-4">БукетМастер</h3>
                 
+                {% if form.errors %}
+                <div class="alert alert-danger">
+                    Неверный email или пароль.
+                </div>
+                {% endif %}
+                
                 <form method="post">
                     {% csrf_token %}
-                    {{ form|crispy }}
+                    
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label">Email</label>
+                        <input type="email" name="username" class="form-control" id="id_username" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_password" class="form-label">Пароль</label>
+                        <input type="password" name="password" class="form-control" id="id_password" required>
+                    </div>
                     
                     <button type="submit" class="btn btn-primary w-100 mb-3">Войти</button>
                     
